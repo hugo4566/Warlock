@@ -15,6 +15,7 @@ public class Spell : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//	Find cooldown icon - UI
 		GameObject[] uis = GameObject.FindGameObjectsWithTag ("UI");
 		foreach (GameObject go in uis) {
 			if (go.name == "cooldown") {
@@ -31,7 +32,11 @@ public class Spell : MonoBehaviour {
 		Ray raySpell = Camera.main.ScreenPointToRay(Input.mousePosition);
 		Debug.DrawRay(raySpell.origin, raySpell.direction * 40, Color.blue);
 		RaycastHit hit;
+
+		// If the is KeyPressed and is off Cooldown
+		// Rotate player and throw spell at mouse direction
 		if (Input.GetKeyDown (KeyCode.Q) && timeStamp <= Time.time) {
+			//	Get position of the mouse
 			if (Physics.Raycast (raySpell, out hit)) {
 				spellPosition = hit.point;
 				spellPosition.Set (spellPosition.x, transform.position.y, spellPosition.z);
@@ -48,11 +53,13 @@ public class Spell : MonoBehaviour {
 			Vector3 forward = transform.TransformDirection (Vector3.forward);
 			GameObject flame = (GameObject)Instantiate (_prefab, transform.position + forward, Quaternion.identity);
 			flame.GetComponent<Rigidbody> ().AddForce (forward * 300);
+
+			// Activate icon of cooldown
 			_uiGo.SetActive (true);
+			// Set cooldown
 			timeStamp = Time.time + _cooldown;
 		}else if (timeStamp <= Time.time) {
 			_uiGo.SetActive (false);
-			Debug.Log(""+transform.position);
 		}
 
 	}
