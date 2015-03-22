@@ -15,7 +15,7 @@ public class explode : MonoBehaviour {
 
 	void OnCollisionEnter (Collision col){
 		if (col.gameObject.name == "Sphere") {
-			col.gameObject.GetComponent<Rigidbody> ().AddForce (Vector3.forward * 2,ForceMode.Impulse);
+			col.gameObject.GetComponent<Rigidbody> ().AddForce (Vector3.forward * 3,ForceMode.Impulse);
 			Destroy(gameObject);
 		}
 	}

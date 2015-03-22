@@ -47,8 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\CameraMovement.cs" />
+     <Compile Include="Assets\CastSpell.cs" />
      <Compile Include="Assets\Mouse.cs" />
-     <Compile Include="Assets\Spell.cs" />
+     <Compile Include="Assets\SpellModel.cs" />
      <Compile Include="Assets\explode.cs" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
