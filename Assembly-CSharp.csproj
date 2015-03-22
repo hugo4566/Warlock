@@ -48,7 +48,10 @@
   <ItemGroup>
      <Compile Include="Assets\CameraMovement.cs" />
      <Compile Include="Assets\CastSpell.cs" />
+     <Compile Include="Assets\LavaFloor.cs" />
      <Compile Include="Assets\Mouse.cs" />
+     <Compile Include="Assets\PlayerStats.cs" />
+     <Compile Include="Assets\SafeFloor.cs" />
      <Compile Include="Assets\SpellModel.cs" />
      <Compile Include="Assets\explode.cs" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
