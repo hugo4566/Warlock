@@ -98,7 +98,9 @@ public class CastSpell : MonoBehaviour {
 			GameObject go = GameObject.FindWithTag("Enemy");
 			float distance = Vector3.Distance(go.transform.position,transform.position);
 			if(distance <= 4.0f){
+				//	Direction of the movement
 				Vector3 spellDir = (go.transform.position - transform.position).normalized;
+				//	Aplly force to close enemies
 				go.GetComponent<Rigidbody> ().AddForce (spellDir * 300);
 			}
 		}
