@@ -1,20 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class explode : MonoBehaviour {
+public class FireSpell : MonoBehaviour {
+
+	public Vector3 forward { get; set;}
 
 	// Use this for initialization
 	void Start () {
-	
+		gameObject.GetComponent<Rigidbody> ().AddForce (forward * 300);
+		Destroy(gameObject,1.5f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Destroy(gameObject,1.5f);
+	
 	}
 
 	void OnCollisionEnter (Collision collisionInfo){
-		if (collisionInfo.gameObject.name == "Sphere") {
+		if (collisionInfo.gameObject.tag == "Enemy") {
 			PlayerStats ps= collisionInfo.gameObject.GetComponent<PlayerStats>();
 			ps.hp -= 10;
 			if(ps.hp <=0)
@@ -23,9 +26,7 @@ public class explode : MonoBehaviour {
 			Vector3 forceVec = collisionInfo.rigidbody.velocity.normalized*(10f/(ps.hp/100));
 			collisionInfo.rigidbody.AddForce(forceVec,ForceMode.Impulse);
 			Destroy(gameObject);
-
-
-
 		}
 	}
+
 }
