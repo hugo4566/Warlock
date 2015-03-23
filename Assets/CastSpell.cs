@@ -22,14 +22,18 @@ public class CastSpell : MonoBehaviour {
 
 		// If the is KeyPressed and is off Cooldown
 		// Rotate player and cast spell at mouse direction
-		if (Input.GetKeyDown (KeyCode.Q) && timeStamp <= Time.time) {
-			SpellModel fire = new Model.SpellModel("fire",1.5f,"MyFlare");
+		if ((Input.GetKeyDown (KeyCode.Q) || Input.GetKeyDown (KeyCode.W)) && timeStamp <= Time.time) {
+			SpellModel spell = null;
+			if(Input.GetKeyDown (KeyCode.Q))
+				spell = new Model.SpellModel("fire",1.5f,"MyFlare");
+			if(Input.GetKeyDown (KeyCode.W))
+				spell = new Model.SpellModel("teleport",3.0f,null);
 
 			MousePosition ();
 
 			RotateToPoint ();
 
-			CreateSpell (fire);
+			CreateSpell (spell);
 
 		}else if (timeStamp <= Time.time) {
 			_uiGo.SetActive (false);
@@ -72,16 +76,31 @@ public class CastSpell : MonoBehaviour {
 		transform.rotation = Quaternion.Slerp (transform.rotation, _lookRotation, Time.deltaTime * _speedRotation);
 	}
 
-	void CreateSpell (SpellModel fire)
+	void CreateSpell (SpellModel spell)
 	{
-		//	Create spell, addForce, activate icon and cooldown
-		Vector3 forward = transform.TransformDirection (Vector3.forward);
-		//	Load spell particle from folder "Resources" 
-		GameObject flame = (GameObject)Instantiate (Resources.Load (fire.particlePath, typeof(GameObject)), transform.position + forward, Quaternion.identity);
-		flame.GetComponent<Rigidbody> ().AddForce (forward * 300);
+		ActivateSpell (spell);
 		// Activate icon of cooldown
 		_uiGo.SetActive (true);
 		// Set cooldown
-		timeStamp = Time.time + fire.cooldown;
+		timeStamp = Time.time + spell.cooldown;
+	}
+
+	void ActivateSpell (SpellModel spell)
+	{
+		Vector3 forward = transform.TransformDirection (Vector3.forward);
+		if (spell.spellName == "fire") {
+			//	Load spell particle from folder "Resources" 
+			GameObject flame = (GameObject)Instantiate (Resources.Load (spell.particlePath, typeof(GameObject)), transform.position + forward, Quaternion.identity);
+			flame.GetComponent<Rigidbody> ().AddForce (forward * 300);
+		}
+		if (spell.spellName == "teleport") {
+			transform.position = spellPosition;
+			GameObject go = GameObject.FindWithTag("Enemy");
+			float distance = Vector3.Distance(go.transform.position,transform.position);
+			if(distance <= 4.0f){
+				Vector3 spellDir = (go.transform.position - transform.position).normalized;
+				go.GetComponent<Rigidbody> ().AddForce (spellDir * 300);
+			}
+		}
 	}
 }

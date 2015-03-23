@@ -1,10 +1,12 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PlayerStats.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\explode.cs">
     <Files>
-      <File FileName="Assets\PlayerStats.cs" Line="4" Column="29" />
-      <File FileName="Assets\LavaFloor.cs" Line="26" Column="68" />
-      <File FileName="Assets\CastSpell.cs" Line="1" Column="1" />
+      <File FileName="Assets\LavaFloor.cs" Line="21" Column="39" />
+      <File FileName="Assets\SafeFloor.cs" Line="14" Column="3" />
+      <File FileName="Assets\PlayerStats.cs" Line="16" Column="18" />
+      <File FileName="Assets\CastSpell.cs" Line="81" Column="59" />
+      <File FileName="Assets\explode.cs" Line="23" Column="82" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
