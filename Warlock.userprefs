@@ -1,9 +1,11 @@
 ﻿<Properties GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CastSpell.cs">
     <Files>
-      <File FileName="Assets\FireSpell.cs" Line="20" Column="45" />
-      <File FileName="Assets\CastSpell.cs" Line="28" Column="45" />
+      <File FileName="Assets\CastSpell.cs" Line="84" Column="23" />
+      <File FileName="Assets\HomingSpell.cs" Line="43" Column="56" />
+      <File FileName="Assets\FireSpell.cs" Line="29" Column="99" />
+      <File FileName="Assets\SpellModel.cs" Line="17" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

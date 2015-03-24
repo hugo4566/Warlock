@@ -5,7 +5,6 @@ using Model;
 public class CastSpell : MonoBehaviour {
 	
 	private float timeStamp;
-	private GameObject _uiGo;
 	private Vector3 spellPosition;
 
 	private Quaternion _lookRotation;
@@ -14,7 +13,7 @@ public class CastSpell : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GetCooldownIcon ();
+
 	}
 	
 	// Update is called once per frame
@@ -24,14 +23,15 @@ public class CastSpell : MonoBehaviour {
 		// Rotate player and cast spell at mouse direction
 		if ((Input.GetKeyDown (KeyCode.Q) || Input.GetKeyDown (KeyCode.W) || Input.GetKeyDown (KeyCode.E)) && timeStamp <= Time.time) {
 			SpellModel spell = null;
+
 			if(Input.GetKeyDown (KeyCode.Q)){
-				spell = new Model.SpellModel("fire",1.5f,"MyFlare");
+				spell = new Model.SpellModel("fire",10.0f,"MyFlare","fire",3.0f,1.5f);
 			}
 			if(Input.GetKeyDown (KeyCode.W)){
-				spell = new Model.SpellModel("teleport",3.0f,null);
+				spell = new Model.SpellModel("teleport",7.5f,null,null,3.0f,0);
 			}
 			if(Input.GetKeyDown (KeyCode.E)){
-				spell = new Model.SpellModel("homing",1.0f,"MyHoming");
+				spell = new Model.SpellModel("homing",5.0f,"MyHoming","homing",1.0f,10.0f);
 			}
 
 			MousePosition ();
@@ -39,23 +39,6 @@ public class CastSpell : MonoBehaviour {
 			RotateToPoint ();
 
 			CreateSpell (spell);
-
-		}else if (timeStamp <= Time.time) {
-			_uiGo.SetActive (false);
-		}
-
-	}
-
-	void GetCooldownIcon ()
-	{
-		//	Find cooldown icon - UI
-		GameObject[] uis = GameObject.FindGameObjectsWithTag ("UI");
-		foreach (GameObject go in uis) {
-			if (go.name == "cooldown") {
-				_uiGo = go;
-				_uiGo.SetActive (false);
-				break;
-			}
 		}
 	}
 
@@ -84,8 +67,6 @@ public class CastSpell : MonoBehaviour {
 	void CreateSpell (SpellModel spell)
 	{
 		ActivateSpell (spell);
-		// Activate icon of cooldown
-		_uiGo.SetActive (true);
 		// Set cooldown
 		timeStamp = Time.time + spell.cooldown;
 	}
@@ -96,11 +77,15 @@ public class CastSpell : MonoBehaviour {
 		if (spell.spellName == "fire") {
 			//	Load spell particle from folder "Resources" 
 			GameObject flame = (GameObject)Instantiate (Resources.Load (spell.particlePath, typeof(GameObject)), transform.position + forward, Quaternion.identity);
-			flame.GetComponent<FireSpell>().forward = forward;
+			FireSpell fs = flame.GetComponent<FireSpell>();
+			fs.forward = forward;
+			fs.spellModel = spell;
+
+			createIcon (spell);
 		}
 		if (spell.spellName == "teleport") {
 			transform.position = spellPosition;
-			// Find enemies within reach
+			//	Find enemies within reach
 			GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Enemy");
 			foreach(GameObject go in gameObjects){
 				float distance = Vector3.Distance(go.transform.position,transform.position);
@@ -113,10 +98,23 @@ public class CastSpell : MonoBehaviour {
 			}
 		}
 		if (spell.spellName == "homing") {
+			//	Load spell particle from folder "Resources" 
 			GameObject homing = (GameObject)Instantiate (Resources.Load (spell.particlePath, typeof(GameObject)), transform.position + forward, Quaternion.identity);
 			HomingSpell homingSpell = homing.GetComponent<HomingSpell>();
 			homingSpell.forward = forward;
 			homingSpell.spellPosition = spellPosition;
+			homingSpell.spellModel = spell;
+
+			createIcon (spell);
 		}
+	}
+
+	static void createIcon (SpellModel spell)
+	{
+		Transform icon = ((GameObject)Instantiate (Resources.Load (spell.spellName, typeof(GameObject)))).transform;
+		icon.SetParent (GameObject.FindWithTag ("Canvas").transform);
+		RectTransform rt = (RectTransform)icon;
+		rt.anchoredPosition = Vector3.zero;
+		Destroy (icon.gameObject, spell.cooldown);
 	}
 }

@@ -1,28 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Model;
 
 public class HomingSpell : MonoBehaviour {
 
 	public Vector3 forward { get; set;}
 	public GameObject target { get; set;}
 	public Vector3 spellPosition { get; set;}
+	public SpellModel spellModel { get; set;}
 
 	// Use this for initialization
 	void Start () {
 		gameObject.GetComponent<Rigidbody> ().AddForce (forward * 300);
+
 		// Find enemies within reach
 		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Enemy");
-		
 		float shorter = -1f;
 		foreach(GameObject go in gameObjects){
 			float distance = Vector3.Distance(go.transform.position,spellPosition);
-			Debug.Log("Distance : " + distance);
 			if(shorter == -1f || shorter > distance){
 				shorter = distance;
 				target = go;
 			}
 		}
-		Destroy(gameObject,10.0f);
+		Destroy(gameObject,spellModel.spellDuration);
 	}
 	
 	// Update is called once per frame
@@ -34,13 +35,15 @@ public class HomingSpell : MonoBehaviour {
 	void OnCollisionEnter (Collision collisionInfo){
 		if (collisionInfo.gameObject.tag == "Enemy") {
 			PlayerStats ps= collisionInfo.gameObject.GetComponent<PlayerStats>();
-			ps.hp -= 10;
+			ps.hp -= spellModel.dmg;
 			if(ps.hp <=0)
 				Destroy(collisionInfo.gameObject);
 			Debug.Log (ps.namePlayer + "  : " + ps.hp);
-			Vector3 spellDir = -(transform.position - collisionInfo.transform.position).normalized;
-			Vector3 forceVec = spellDir*(10f/(ps.hp/100));
-			collisionInfo.rigidbody.AddForce(forceVec,ForceMode.Impulse);
+			if(collisionInfo.gameObject != null){
+				Vector3 direction = -(transform.position - collisionInfo.transform.position).normalized;
+				Vector3 forceVector = direction*(spellModel.dmg/(ps.hp/100));
+				collisionInfo.rigidbody.AddForce(forceVector,ForceMode.Impulse);
+			}
 			Destroy(gameObject);
 		}
 	}
